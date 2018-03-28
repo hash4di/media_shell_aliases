@@ -7,7 +7,7 @@ function video_audio_offset() {
       video_audio_offset_VALUE="$OFFSET"
       ;;
   esac
-  video_audio_offset_SUFFIX=`basename \`echo "$1" | sed -e "s|\.|/|g"\` | tail -n 1`
+  video_audio_offset_SUFFIX=$(basename "${1//\./\//}" | tail -n 1)
   ffmpeg -i "$1" \
          -itsoffset "$video_audio_offset_VALUE" \
          -i "$1" \
