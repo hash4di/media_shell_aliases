@@ -16,12 +16,7 @@ function dvd_to_x264() {
   do
     if [ -d "$dvd_to_x264_DIR" ]; then
       if [ -d "$dvd_to_x264_DIR/VIDEO_TS" ]; then
-        local dvd_to_x264_INPUT="concat:"
-        while IFS= read -r -d '' dvd_to_x264_FILE
-        do
-          dvd_to_x264_INPUT="$dvd_to_x264_INPUT|$dvd_to_x264_FILE"
-        done <   <(find "$dvd_to_x264_DIR/VIDEO_TS" -iname "*.vob" -type f -print0)
-        dvd_to_x264_INPUT=${dvd_to_x264_INPUT//concat:|/concat:/}
+        dvd_to_x264_INPUT=$(find "$dvd_to_x264_DIR/VIDEO_TS" -iname "*.sh" -type f | sed  -e 's|^./||' | tr "\n" '|' | sed -e 's/|$//')
         echorun ffmpeg -i "$dvd_to_x264_INPUT" -c:v libx264 -preset fast -crf 20 -c:a "$dvd_to_x264_ACODEC" -threads 0 "$dvd_to_x264_DIR.x264.mp4"
       else
         echo
